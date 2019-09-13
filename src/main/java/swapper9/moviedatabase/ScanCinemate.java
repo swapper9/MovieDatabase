@@ -73,9 +73,11 @@ public class ScanCinemate {
 
   private static byte[] savePoster(String image_url) throws IOException {
     URL url = new URL(image_url);
-    InputStream in = new BufferedInputStream(url.openStream());
+    HttpURLConnection httpcon = (HttpURLConnection) url.openConnection();
+    httpcon.addRequestProperty("User-Agent", "Mozilla/4.76");
+    InputStream in = new BufferedInputStream(httpcon.getInputStream());
     ByteArrayOutputStream out = new ByteArrayOutputStream();
-    byte[] buf = new byte[1024];
+    byte[] buf = new byte[2048];
     int n = 0;
     while (-1!=(n=in.read(buf))) {
       out.write(buf, 0, n);

@@ -9,8 +9,7 @@ import java.util.List;
 
 public interface MovieRepo extends JpaRepository<Movie, Integer> {
 
-  @Query("from Movie e " +
-    "where " +
-    "   concat(e.title_original, ' ', e.title_russian, ' ', e.year) like concat('%', :title, '%')")
+  @Query("from Movie m where " +
+    " concat(m.title_original, ' ', m.title_russian, ' ', m.year) like concat('%', :title, '%')")
   List<Movie> findByTitle(@Param("title")String title);
 }

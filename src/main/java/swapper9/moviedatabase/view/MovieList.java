@@ -39,7 +39,10 @@ public class MovieList extends VerticalLayout {
     filter.addValueChangeListener(field -> fillList(field.getValue()));
     passkey.setPlaceholder("Passkey");
     movieGrid.setColumns("id", "title_russian", "title_original", "year");
+    movieGrid.setSortableColumns("title_russian", "title_original", "year");
+    movieGrid.setColumnReorderingAllowed(true);
     movieGrid.setHeight("500");
+    movieGrid.getColumnByKey("id").setWidth("50px").setFlexGrow(0);
 
     add(toolbar, toolbar_scan, movieGrid, movieEditor);
 
@@ -62,6 +65,10 @@ public class MovieList extends VerticalLayout {
     });
 
     fillList("");
+  }
+
+  private String findPosterUrl(Integer id) {
+    return this.movieRepo.findById(id).map(Movie::getPoster_big).orElse(null);
   }
 
   private void fillList(String name) {
