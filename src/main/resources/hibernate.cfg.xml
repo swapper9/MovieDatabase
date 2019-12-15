@@ -7,16 +7,21 @@
     <session-factory>
 
         <!-- JDBC Database connection settings -->
-        <property name="connection.driver_class">org.postgresql.Driver</property>
+        <property name="connection.driver_class">net.sourceforge.jtds.jdbc.Driver</property>
+        <property name="connection.url">jdbc:jtds:sqlserver://localhost:1433/mob_test</property>
+        <property name="connection.username">mobile</property>
+        <property name="connection.password">qweasdzxc</property>
+        <!--<property name="connection.driver_class">org.postgresql.Driver</property>
         <property name="connection.url">jdbc:postgresql://localhost:5432/moviedb</property>
         <property name="connection.username">postgres</property>
-        <property name="connection.password">postgres</property>
+        <property name="connection.password">postgres</property>-->
 
         <!-- JDBC connection pool settings ... using built-in test pool -->
         <property name="connection.pool_size">1</property>
 
         <!-- Select our SQL dialect -->
-        <property name="dialect">org.hibernate.dialect.PostgreSQL9Dialect</property>
+        <!--<property name="dialect">org.hibernate.dialect.PostgreSQL9Dialect</property>-->
+        <property name="dialect">org.hibernate.dialect.SQLServer2012Dialect</property>
 
         <!-- Echo the SQL to stdout -->
         <property name="show_sql">true</property>

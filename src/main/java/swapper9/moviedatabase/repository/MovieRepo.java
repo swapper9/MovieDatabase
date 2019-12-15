@@ -1,4 +1,4 @@
-package swapper9.moviedatabase.repo;
+package swapper9.moviedatabase.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
