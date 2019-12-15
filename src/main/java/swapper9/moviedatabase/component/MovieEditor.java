@@ -12,7 +12,7 @@ import com.vaadin.flow.spring.annotation.UIScope;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import swapper9.moviedatabase.domain.Movie;
-import swapper9.moviedatabase.repo.MovieRepo;
+import swapper9.moviedatabase.repository.MovieRepo;
 
 
 @SpringComponent

@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import swapper9.moviedatabase.ScanCinemate;
 import swapper9.moviedatabase.component.MovieEditor;
 import swapper9.moviedatabase.domain.Movie;
-import swapper9.moviedatabase.repo.MovieRepo;
+import swapper9.moviedatabase.repository.MovieRepo;
 
 import java.io.IOException;
 
