@@ -11,25 +11,18 @@ public class Movie {
 
   @Id
   @GeneratedValue(strategy= GenerationType.IDENTITY)
-  @Column(name="id")
   private int id;
 
-  @Column(name="url")
   private String url;
 
-  @Column(name="title_russian")
   private String title_russian;
 
-  @Column(name="title_original")
   private String title_original;
 
-  @Column(name="year")
   private String year;
 
-  @Column(name="poster_small")
   private String poster_small;
 
-  @Column(name="poster_big")
   private String poster_big;
 
   public Movie() {
