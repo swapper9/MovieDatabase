@@ -21,6 +21,9 @@ public class MovieList extends VerticalLayout {
   private final MovieRepo movieRepo;
   private final MovieEditor movieEditor;
 
+  @Autowired
+  private ScanCinemate scanCinemate;
+
   private Grid<Movie> movieGrid= new Grid<>(Movie.class);
   private final TextField filter = new TextField();
   private final Button addNewButton = new Button("New movie", VaadinIcon.PLUS.create());
@@ -53,7 +56,7 @@ public class MovieList extends VerticalLayout {
     addNewButton.addClickListener(e -> movieEditor.editMovie(new Movie()));
     scanCCButton.addClickListener(e -> {
       try {
-        ScanCinemate.addMoviesToDb(passkey.getValue());
+        scanCinemate.addMoviesToDb(passkey.getValue());
       } catch (IOException ex) {
         ex.printStackTrace();
       }

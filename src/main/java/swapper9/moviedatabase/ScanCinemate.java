@@ -3,14 +3,14 @@ package swapper9.moviedatabase;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import swapper9.moviedatabase.domain.Movie;
+import swapper9.moviedatabase.repository.MovieRepo;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
@@ -21,7 +21,11 @@ import java.net.URL;
 import java.util.Optional;
 import java.util.Scanner;
 
+@Service
 public class ScanCinemate {
+
+  @Autowired
+  private MovieRepo movieRepo;
 
   /**
    * Первый параметр - PASSKEY юзера, который можно взять на http://cinemate.cc/preferences/#api
@@ -29,17 +33,13 @@ public class ScanCinemate {
    * @param passkey
    * @throws IOException
    */
-  public static void addMoviesToDb(String passkey) throws IOException {
-
-    SessionFactory factory = new Configuration()
-      .configure("hibernate.cfg.xml")
-      .addAnnotatedClass(Movie.class)
-      .buildSessionFactory();
+  public void addMoviesToDb(String passkey) throws IOException {
 
     int page = 0;
+    int numScan = 1;
     while (true) {
-      JsonObject jsonObject = new JsonParser()
-        .parse(getHtmlPageFromUrl(new URL("http://api.cinemate.cc/account.votes?passkey=" + passkey + "&format=json&page=" + page)))
+      JsonObject jsonObject = JsonParser
+        .parseString(getHtmlPageFromUrl(new URL("http://api.cinemate.cc/account.votes?passkey=" + passkey + "&format=json&page=" + page)))
         .getAsJsonObject();
       JsonArray jsonVoteArray = (JsonArray)jsonObject.get("vote");
       if (jsonVoteArray.size() < 1) break;
@@ -58,17 +58,18 @@ public class ScanCinemate {
         String poster_url_big = "https:".concat(jsonMovieObject.get("movie").getAsJsonObject().get("poster").getAsJsonObject().get("big").getAsJsonObject().get("url").getAsString());
         //byte[] small_poster = savePoster(poster_url_small);
         //byte[] big_poster = savePoster(poster_url_big);
-
-        try(Session session = factory.getCurrentSession()) {
+        Movie movieDb = movieRepo.findByUrl(movie_url);
+        if (movieDb == null) {
           Movie movie = new Movie(movie_url, title_russian, title_original, year, poster_url_small, poster_url_big);
-          session.beginTransaction();
-          session.save(movie);
-          session.getTransaction().commit();
+          movieRepo.save(movie);
+          System.out.println("#" + numScan++ + " saving movie#" + movie.getId());
+        } else {
+          System.out.println("#" + numScan++ + " skipped, duplicated url: " + movie_url);
+          break;
         }
       }
       page++;
     }
-    factory.close();
   }
 
   private static byte[] savePoster(String image_url) throws IOException {
