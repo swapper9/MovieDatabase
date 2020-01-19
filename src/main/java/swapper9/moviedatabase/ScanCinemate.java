@@ -3,6 +3,7 @@ package swapper9.moviedatabase;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import lombok.extern.log4j.Log4j2;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -10,7 +11,7 @@ import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import swapper9.moviedatabase.domain.Movie;
-import swapper9.moviedatabase.repository.MovieRepo;
+import swapper9.moviedatabase.repository.MovieRepository;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
@@ -22,10 +23,12 @@ import java.util.Optional;
 import java.util.Scanner;
 
 @Service
+@Log4j2
 public class ScanCinemate {
 
   @Autowired
-  private MovieRepo movieRepo;
+  private MovieRepository movieRepository;
+
 
   /**
    * Первый параметр - PASSKEY юзера, который можно взять на http://cinemate.cc/preferences/#api
@@ -56,12 +59,10 @@ public class ScanCinemate {
         String year = jsonMovieObject.get("movie").getAsJsonObject().get("year").getAsString();
         String poster_url_small = "https:".concat(jsonMovieObject.get("movie").getAsJsonObject().get("poster").getAsJsonObject().get("small").getAsJsonObject().get("url").getAsString());
         String poster_url_big = "https:".concat(jsonMovieObject.get("movie").getAsJsonObject().get("poster").getAsJsonObject().get("big").getAsJsonObject().get("url").getAsString());
-        //byte[] small_poster = savePoster(poster_url_small);
-        //byte[] big_poster = savePoster(poster_url_big);
-        Movie movieDb = movieRepo.findByUrl(movie_url);
+        Movie movieDb = movieRepository.findByUrl(movie_url);
         if (movieDb == null) {
           Movie movie = new Movie(movie_url, title_russian, title_original, year, poster_url_small, poster_url_big);
-          movieRepo.save(movie);
+          movieRepository.save(movie);
           System.out.println("#" + numScan++ + " saving movie#" + movie.getId());
         } else {
           System.out.println("#" + numScan++ + " skipped, duplicated url: " + movie_url);

@@ -9,7 +9,7 @@ import swapper9.moviedatabase.domain.Movie;
 import java.util.List;
 
 @Repository
-public interface MovieRepo extends JpaRepository<Movie, Integer> {
+public interface MovieRepository extends JpaRepository<Movie, Integer> {
 
   @Query("from Movie m where " +
     " concat(m.title_original, ' ', m.title_russian, ' ', m.year) like concat('%', :title, '%')")

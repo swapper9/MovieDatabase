@@ -12,13 +12,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import swapper9.moviedatabase.ScanCinemate;
 import swapper9.moviedatabase.component.MovieEditor;
 import swapper9.moviedatabase.domain.Movie;
-import swapper9.moviedatabase.repository.MovieRepo;
+import swapper9.moviedatabase.repository.MovieRepository;
 
 import java.io.IOException;
 
 @Route("")
 public class MovieList extends VerticalLayout {
-  private final MovieRepo movieRepo;
+  private final MovieRepository movieRepository;
   private final MovieEditor movieEditor;
 
   @Autowired
@@ -33,8 +33,8 @@ public class MovieList extends VerticalLayout {
   private final HorizontalLayout toolbar_scan = new HorizontalLayout(passkey, scanCCButton);
 
   @Autowired
-  public MovieList(MovieRepo movieRepo, MovieEditor movieEditor) {
-    this.movieRepo = movieRepo;
+  public MovieList(MovieRepository movieRepository, MovieEditor movieEditor) {
+    this.movieRepository = movieRepository;
     this.movieEditor = movieEditor;
 
     filter.setPlaceholder("Type to filter");
@@ -71,14 +71,14 @@ public class MovieList extends VerticalLayout {
   }
 
   private String findPosterUrl(Integer id) {
-    return this.movieRepo.findById(id).map(Movie::getPoster_big).orElse(null);
+    return this.movieRepository.findById(id).map(Movie::getPoster_big).orElse(null);
   }
 
   private void fillList(String name) {
     if (name.isEmpty()) {
-      movieGrid.setItems(this.movieRepo.findAll());
+      movieGrid.setItems(this.movieRepository.findAll());
     } else {
-      movieGrid.setItems(this.movieRepo.findByTitle(name));
+      movieGrid.setItems(this.movieRepository.findByTitle(name));
     }
   }
 }

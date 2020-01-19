@@ -12,13 +12,13 @@ import com.vaadin.flow.spring.annotation.UIScope;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import swapper9.moviedatabase.domain.Movie;
-import swapper9.moviedatabase.repository.MovieRepo;
+import swapper9.moviedatabase.repository.MovieRepository;
 
 
 @SpringComponent
 @UIScope
 public class MovieEditor extends VerticalLayout implements KeyNotifier {
-  private final MovieRepo movieRepo;
+  private final MovieRepository movieRepository;
   private Movie movie;
 
   private TextField movie_url = new TextField("", "Movie url");
@@ -42,8 +42,8 @@ public class MovieEditor extends VerticalLayout implements KeyNotifier {
   }
 
   @Autowired
-  public MovieEditor(MovieRepo movieRepo) {
-    this.movieRepo = movieRepo;
+  public MovieEditor(MovieRepository movieRepository) {
+    this.movieRepository = movieRepository;
     add(movie_url, title_russian, title_original, year, poster_url_small, poster_url_big, buttons);
     binder.bindInstanceFields(this);
     setSpacing(true);
@@ -57,12 +57,12 @@ public class MovieEditor extends VerticalLayout implements KeyNotifier {
   }
 
   private void save() {
-    movieRepo.save(movie);
+    movieRepository.save(movie);
     changeHandler.onChange();
   }
 
   private void delete() {
-    movieRepo.delete(movie);
+    movieRepository.delete(movie);
     changeHandler.onChange();
   }
 
@@ -73,7 +73,7 @@ public class MovieEditor extends VerticalLayout implements KeyNotifier {
     }
 
     if (mov.getId() != 0) {
-      this.movie = movieRepo.findById(mov.getId()).orElse(mov);
+      this.movie = movieRepository.findById(mov.getId()).orElse(mov);
     } else {
       this.movie = mov;
     }
