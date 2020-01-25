@@ -14,3 +14,7 @@ package.json
 webpack.config.js
 
 webpack.generated.js
+
+src/main/resources/application.properties
+
+src/main/resources/hibernate.cfg.xml
