@@ -38,8 +38,7 @@ public class ScanCinemate {
     /**
      * Первый параметр - PASSKEY юзера, который можно взять на http://cinemate.cc/preferences/#api
      * Скачивается база, доступная на http://cinemate.cc/profile/{nickname}/view_history/
-     * @param passkey
-     * @throws IOException
+     * @param passkey ключ юзера
      */
     public void addMoviesToDb(String passkey) throws IOException {
         ExecutorService executor = Executors.newFixedThreadPool(50);
@@ -85,7 +84,7 @@ public class ScanCinemate {
         InputStream in = new BufferedInputStream(httpcon.getInputStream());
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         byte[] buf = new byte[2048];
-        int n = 0;
+        int n;
         while (-1!=(n=in.read(buf))) {
             out.write(buf, 0, n);
         }
@@ -127,12 +126,12 @@ public class ScanCinemate {
         if (respCode != 200) {
             throw new RuntimeException("HttpResponseCode: " + respCode);
         }
-        String inline = "";
+        StringBuilder inline = new StringBuilder();
         Scanner scanner = new Scanner(url.openStream());
         while (scanner.hasNext()) {
-            inline += scanner.nextLine();
+            inline.append(scanner.nextLine());
         }
         scanner.close();
-        return inline;
+        return inline.toString();
     }
 }
